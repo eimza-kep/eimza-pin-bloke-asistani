@@ -8,7 +8,7 @@
     PUK kodu temini ve PIN kilidini çözme adımlarında rehberlik eder.
 
 .NOTES
-    Yazar: E-İmza & Dijital Dönüşüm Portalı (https://eimza-kep.github.io/eimza-blog/)
+    Yazar: E-İmza & Dijital Dönüşüm Portalı (https://eimza-rehberi.pages.dev/yazilar/e-imza-pin-kodu-bloke-oldu-cozum.html)
     Lisans: MIT
 #>
 
@@ -85,5 +85,5 @@ if ($foundAkis) {
 }
 
 Write-Host "`n==========================================================================================" -ForegroundColor Cyan
-Write-Host " Detaylı Kılavuz: https://eimza-kep.github.io/eimza-blog/                                 " -ForegroundColor White
+Write-Host " Detaylı Kılavuz: https://eimza-rehberi.pages.dev/yazilar/e-imza-pin-kodu-bloke-oldu-cozum.html                                 " -ForegroundColor White
 Write-Host "==========================================================================================`n" -ForegroundColor Cyan

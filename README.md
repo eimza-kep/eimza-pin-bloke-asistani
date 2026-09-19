@@ -56,3 +56,9 @@ E-İmza veya Mali Mühür PIN kodunu **3 kez üst üste yanlış girerek cihazı
 ## ⚖️ Lisans
 
 Bu proje [MIT Lisansı](LICENSE) kapsamında sunulmaktadır.
+
+
+### 📚 İlgili Rehberler
+* 📄 [E-İmza PIN Kodunu 3 Kez Yanlış Girince Ne Olur? Bloke Kaldırma Adımları](https://eimza-rehberi.pages.dev/yazilar/e-imza-pin-kodu-bloke-oldu-cozum.html)
+* 📄 [E-İmza Sertifikası Alırken İstenen Belgeler ve Başvuru Aşamaları](https://eimza-kep.github.io/eimza-blog/posts/e-imza-sertifikasi-basvuru-asamlari-ve-evraklar.html)
+* 📄 [E-İmzanın Süresi Dolmadan Kaç Gün Önce Yenileme Yapılmalı?](https://eimza-rehberi.pages.dev/yazilar/e-imza-yenileme-ne-zaman-yapilmali.html)
