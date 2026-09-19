@@ -18,8 +18,20 @@ E-İmza veya Mali Mühür PIN kodunu **3 kez üst üste yanlış girerek cihazı
 
 ## 🚀 Hızlı Kullanım
 
-1. Repoyu indirin ve **`pin-kurtarma.bat`** dosyasına çift tıklayın.
-2. Sisteminizdeki AKİS Kart İzleme Aracı taranacak ve doğrudan kilit çözme ekranı başlatılacaktır.
+### 1. Çift Tıklayarak Başlatma
+* Repoyu indirin ve **`pin-kurtarma.bat`** dosyasına çift tıklayın.
+
+### 2. Gelişmiş Komut Satırı Seçenekleri (PowerShell)
+```powershell
+# Belirli bir sağlayıcıya odaklanma
+.\Unlock-PinAssistant.ps1 -Provider KamuSM
+
+# Sağlayıcının PUK portalını doğrudan tarayıcıda açma
+.\Unlock-PinAssistant.ps1 -Provider Turktrust -OpenPortal
+
+# Aracı etkileşimsiz modda çalıştırma ve tespit edilen aracı doğrudan açma
+.\Unlock-PinAssistant.ps1 -Launch -NonInteractive
+```
 
 ---
 
