@@ -1,77 +1,64 @@
-# E-İmza PIN Bloke Kaldırma ve PUK Asistanı 🔒🆘
+# E-İmza & Mali Mühür PIN Bloke Asistanı 🔓🔏
 
-[![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![CI Tests](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions/workflows/ci.yml/badge.svg)](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions/workflows/ci.yml)
-[![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-blue.svg)](https://microsoft.com)
-[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%207%2B-blueviolet.svg)](https://github.com/PowerShell/PowerShell)
+[![Python CI](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions/workflows/ci.yml/badge.svg)](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions)
+[![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Platform: Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com)
+[![Blog](https://img.shields.io/badge/Rehber-E--%C4%B0mza%20Rehberi-22c55e.svg)](https://eimza-rehberi.pages.dev/)
 
-E-İmza veya Mali Mühür PIN kodunu **3 kez üst üste yanlış girerek cihazı bloke eden** kullanıcılar için adım adım PUK kodu alma ve AKİS üzerinden kilidi açma rehberi ve asistanıdır.
-
----
-
-## ⚠️ Kritik Güvenlik Kuralı
-
-* E-imza çipinin donanımsal güvenlik mimarisi gereği PIN kodu 3 kez yanlış girildiğinde cihaz kendini kilitler (**BLOKE**).
-* Kilidi açmak için **PUK Kodu** şarttır.
-* **DİKKAT:** PUK kodunu da 3 kez hatalı girerseniz akıllı kart kalıcı olarak kilitlenir (**Kart Yanar**) ve ücreti karşılığında sıfırdan yeni e-imza üretilmesi gerekir! Bu nedenle rastgele PUK denemesi yapmayınız!
+E-İmza ve Mali Mühür PIN kodunu 3 kez yanlış girerek bloke edenler için; yetkili sertifika sağlayıcılarından (TÜBİTAK Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM Bilişim, Turkcell Mobil İmza) **PUK kodu temin adımlarını gösteren**, yeni PIN güvenlik kurallarını denetleyen ve rastgele güvenli PIN üreten açık kaynaklı yardımcı araç.
 
 ---
 
-## 🚀 Hızlı Kullanım
+## ✨ Öne Çıkan Özellikler
 
-### 1. Çift Tıklayarak Başlatma
-* Repoyu indirin ve **`pin-kurtarma.bat`** dosyasına çift tıklayın.
+* 🏢 **Tüm Sağlayıcılar:** Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM Bilişim ve Mobil İmza kılavuzları.
+* 🛡️ **Güvenli PIN Doğrulama:** Ardışık (123456), tekrarlayan (111111) ve zayıf PIN'leri engelleyen denetim motoru.
+* 🎲 **Kriptografik PIN Üretici:** `--generate-pin` ile kurallara tam uyumlu rastgele 6 haneli yeni PIN üretimi.
+* 🖥️ **PowerShell ve Bash Entegrasyonu:** Windows ve Linux terminal desteği.
 
-### 2. Gelişmiş Komut Satırı Seçenekleri (PowerShell)
-```powershell
-# Belirli bir sağlayıcıya odaklanma
-.\Unlock-PinAssistant.ps1 -Provider KamuSM
+---
 
-# Sağlayıcının PUK portalını doğrudan tarayıcıda açma
-.\Unlock-PinAssistant.ps1 -Provider Turktrust -OpenPortal
+## 🚀 Hızlı Başlangıç
 
-# Aracı etkileşimsiz modda çalıştırma ve tespit edilen aracı doğrudan açma
-.\Unlock-PinAssistant.ps1 -Launch -NonInteractive
+### 1. PUK Rehberini Görüntüleme
+```bash
+# Tüm sağlayıcıları listeleme
+python pin_assistant.py
+
+# Sadece Kamu SM (Mali Mühür) için adımları alma
+python pin_assistant.py --provider kamusm
+```
+
+### 2. Yeni Belirlenecek PIN'i Doğrulama
+```bash
+python pin_assistant.py --validate-pin 482915
+```
+
+### 3. Otomatik Güvenli PIN Üretme
+```bash
+python pin_assistant.py --generate-pin
 ```
 
 ---
 
-## 🏢 Sağlayıcılara Göre PUK Kodu Nasıl Alınır?
+## 🔗 E-Dönüşüm Açık Kaynak Ekosistemi
 
-### 1. TÜBİTAK Kamu SM (Mali Mühür & Kamu E-İmzası)
-* [Kamu SM NES İşlemleri](https://nesislemleri.kamusm.gov.tr/) sayfasına gidin.
-* **"Kilit Çözme"** menüsünü seçin.
-* T.C. Kimlik No ve e-imza başvurusunda belirlediğiniz Güvenlik Sözcüğü ile giriş yapın.
-* Telefonunuza gelen SMS onay kodunu girerek PUK kodunuzu ekrandan öğrenin.
+Bu araç [eimza-kep](https://github.com/eimza-kep) organizasyonunun açık kaynak e-dönüşüm araçları ekosisteminin bir parçasıdır:
 
-### 2. TÜRKTRUST
-* [TÜRKTRUST Online İşlemler](https://online.turktrust.com.tr/) portalına girin veya `0850 222 88 75` nolu destek hattını arayarak PUK sıfırlama talep edin.
-
-### 3. E-Güven
-* [E-Güven Online İşlem Merkezi](https://www.e-guven.com/) veya `0850 222 48 83` nolu çağrı merkezinden PUK temin edebilirsiniz.
-
-### 4. E-Tuğra
-* [E-Tuğra Müşteri Portalı](https://www.e-tugra.com.tr/) üzerinden kimlik doğrulama ile PUK sorgulanabilir.
+* 🇹🇷 **[awesome-turkiye-e-donusum](https://github.com/eimza-kep/awesome-turkiye-e-donusum):** Türkiye E-Dönüşüm kütüphane, mevzuat ve araçlar listesi.
+* 🩺 **[akilli-kart-surucu-teshis](https://github.com/eimza-kep/akilli-kart-surucu-teshis):** Akıllı kart okuyucu ve sürücü teşhis aracı.
+* ⏱️ **[mali-muhur-eimza-suresi-kontrol](https://github.com/eimza-kep/mali-muhur-eimza-suresi-kontrol):** Sertifika kalan gün denetimi ve bildirim scripti.
+* 📄 **[python-pdf-eimza-dogrulayici](https://github.com/eimza-kep/python-pdf-eimza-dogrulayici):** PDF belgelerindeki PAdES e-imzaları doğrulama aracı.
 
 ---
 
-## 🛠️ PUK Kodunu Aldıktan Sonra AKİS ile Kilit Çözme
-
-1. **AKİS Kart İzleme Aracını** açın (Başlat menüsünden aratabilirsiniz).
-2. Sol tarafta e-imzanızı ve adınızı seçin.
-3. Üst menüden **"PIN İşlemleri" > "Kilit Çöz"** butonuna basın.
-4. Sağlayıcınızdan aldığınız **PUK Kodunu** girin.
-5. Alt kutucuklara unutmayacağınız yeni bir **6 haneli PIN** yazıp onaylayın.
-6. Kartınızın kilidi anında açılacaktır!
+## 📚 İlgili Teknik Rehberler
+* 📄 [E-İmza PIN Kodu Bloke Oldu Ne Yapmalıyım? PUK ile Kilit Çözme](https://eimza-rehberi.pages.dev/yazilar/eimza-pin-bloke-puk-kodu-sifirlama.html)
+* 📄 [Mali Mühür Bloke Olduğunda PUK Kodu ile Kilit Nasıl Açılır?](https://mali-muhur-merkezi.pages.dev/yazilar/mali-muhur-pin-bloke-puk-kodu-cozum.html)
+* 📄 [AKİS Akıllı Kart İzleme Aracında PIN Kilidi Açma Adımları](https://eimza-rehberi.pages.dev/yazilar/akis-kart-izleme-araci-kullanim-rehberi.html)
 
 ---
 
 ## ⚖️ Lisans
 
-Bu proje [MIT Lisansı](LICENSE) kapsamında sunulmaktadır.
-
-
-### 📚 İlgili Rehberler
-* 📄 [E-İmza PIN Kodunu 3 Kez Yanlış Girince Ne Olur? Bloke Kaldırma Adımları](https://eimza-rehberi.pages.dev/yazilar/e-imza-pin-kodu-bloke-oldu-cozum.html)
-* 📄 [E-İmza Sertifikası Alırken İstenen Belgeler ve Başvuru Aşamaları](https://eimza-kep.github.io/eimza-blog/posts/e-imza-sertifikasi-basvuru-asamlari-ve-evraklar.html)
-* 📄 [E-İmzanın Süresi Dolmadan Kaç Gün Önce Yenileme Yapılmalı?](https://eimza-rehberi.pages.dev/yazilar/e-imza-yenileme-ne-zaman-yapilmali.html)
+Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.

@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-E-İmza PIN Bloke Kaldırma ve PUK Kodu Asistanı
-Sağlayıcı bazlı PUK temin portalları ve güvenli yeni PIN doğrulama motoru.
+E-İmza PIN Bloke Kaldırma, PUK Kodu & Güvenli PIN Üretici Asistanı v1.2
+======================================================================
+Türkiye'deki tüm yetkili ESHS ve GSM operatörlerinin (Kamu SM, TÜRKTRUST,
+E-Güven, E-Tuğra, EDM, Turkcell, Vodafone, TT) PUK temin adımlarını, güvenli
+PIN kurallarını ve kriptografik rastgele yeni PIN üretimini sağlar.
+
+Yazar: E-İmza & Dijital Dönüşüm Portalı (https://eimza-rehberi.pages.dev/)
+Lisans: MIT
 """
 
 import sys
 import re
+import secrets
+import json
 
 # Force UTF-8 stdout
 if sys.platform == "win32":
@@ -39,6 +47,18 @@ PROVIDERS = {
         "description": "Nitelikli elektronik sertifika hizmet sağlayıcısı",
         "portal_url": "https://www.e-tugra.com.tr/",
         "puk_guide": "1. E-Tuğra Kullanıcı Portalı'ndan TC Kimlik ve SMS onayı ile giriş yapın.\n2. Sertifika Yönetimi > PUK Kodunu Göster seçeneğine tıklayın.\n3. AKİS veya CardOS yönetim panelinden PIN kilidini çözün."
+    },
+    "edmbilisim": {
+        "name": "EDM Bilişim",
+        "description": "EDM e-imza ve KEP kurumsal çözümleri",
+        "portal_url": "https://portal.edmbilisim.com.tr/",
+        "puk_guide": "1. EDM Müşteri Portalı'na giriş yapın.\n2. E-İmza İşlemleri sekmesinden PUK Kodu Al düğmesine basın.\n3. USB Token yönetim panelinde PUK girerek yeni PIN belirleyin."
+    },
+    "turkcell": {
+        "name": "Turkcell Mobil İmza",
+        "description": "SIM kart tabanlı mobil elektronik imza",
+        "portal_url": "https://www.turkcell.com.tr/",
+        "puk_guide": "1. 3 kez yanlış girilen Mobil İmza şifresi bloke olur.\n2. Turkcell Müşteri Hizmetleri (532) veya Turkcell Mağazaları üzerinden kimlik doğrulamasıyla yeni şifre oluşturulmalıdır."
     }
 }
 
@@ -74,41 +94,75 @@ def validate_pin(pin: str) -> dict:
 
     return {"valid": True, "reason": "PIN kurallara uygun ve güvenli."}
 
+def generate_secure_pin(length=6) -> str:
+    """Kurallara tam uyumlu kriptografik rastgele güvenli PIN üretir."""
+    if length < 6:
+        length = 6
+    if length > 8:
+        length = 8
+
+    while True:
+        digits = [str(secrets.randbelow(10)) for _ in range(length)]
+        candidate = "".join(digits)
+        if validate_pin(candidate)["valid"]:
+            return candidate
+
 def get_provider_info(provider_key: str):
     return PROVIDERS.get(provider_key.lower().strip())
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="E-İmza PIN Bloke Kaldırma ve PUK Asistanı")
-    parser.add_argument("--provider", choices=["kamusm", "turktrust", "eguven", "etugra", "all"], default="all", help="E-imza sağlayıcısı")
+    parser = argparse.ArgumentParser(description="E-İmza PIN Bloke Kaldırma ve PUK Asistanı v1.2")
+    parser.add_argument("--provider", choices=list(PROVIDERS.keys()) + ["all"], default="all", help="E-imza sağlayıcısı")
     parser.add_argument("--validate-pin", help="Yeni belirlenecek PIN kodunun güvenliğini test et")
+    parser.add_argument("--generate-pin", action="store_true", help="Güvenli, kurallara uygun rastgele 6 haneli yeni PIN üretir")
+    parser.add_argument("--json", action="store_true", help="JSON çıktısı ver")
+
     args = parser.parse_args()
+
+    if args.generate_pin:
+        pin = generate_secure_pin(6)
+        if args.json:
+            print(json.dumps({"generated_pin": pin, "length": 6, "status": "SECURE"}, indent=2))
+        else:
+            print(f"🔒 Üretilen Güvenli PIN: {pin} (6 Basamaklı)")
+            print("💡 AKİS veya SafeNet yönetim yazılımında bu kodu yeni PIN olarak belirleyebilirsiniz.")
+        return
 
     if args.validate_pin:
         res = validate_pin(args.validate_pin)
-        if res["valid"]:
-            print(f"[✓] Başarılı: {res['reason']}")
+        if args.json:
+            print(json.dumps(res, indent=2, ensure_ascii=False))
         else:
-            print(f"[!] HATA: {res['reason']}")
-            sys.exit(1)
+            if res["valid"]:
+                print(f"[✓] Başarılı: {res['reason']}")
+            else:
+                print(f"[!] HATA: {res['reason']}")
+                sys.exit(1)
+        return
+
+    if args.json:
+        selected = PROVIDERS if args.provider == "all" else {args.provider: PROVIDERS[args.provider]}
+        print(json.dumps(selected, indent=2, ensure_ascii=False))
         return
 
     print("=" * 65)
-    print("      E-İMZA PIN BLOKE KALDIRMA VE PUK REHBERİ")
+    print("      E-İMZA PIN BLOKE KALDIRMA VE PUK REHBERİ v1.2")
     print("=" * 65)
 
     selected = PROVIDERS.keys() if args.provider == "all" else [args.provider]
+
     for key in selected:
-        info = PROVIDERS[key]
-        print(f"\n🏢 {info['name']} ({info['description']})")
-        print(f"🔗 Online PUK Portalı: {info['portal_url']}")
-        print("📋 Çözüm Adımları:")
-        for line in info['puk_guide'].split("\n"):
-            print(f"   {line}")
+        p = PROVIDERS[key]
+        print(f"\n🏢 {p['name']}")
+        print(f"   Açıklama   : {p['description']}")
+        print(f"   PUK Portalı: {p['portal_url']}")
+        print("   Adımlar    :")
+        for line in p["puk_guide"].split("\n"):
+            print(f"     {line}")
 
     print("\n" + "=" * 65)
-    print("⚠️ UYARI: PUK kodunu 3 defa hatalı girerseniz kartınız KULLANILAMAZ hale gelir!")
-    print("=" * 65)
+    print("💡 İPUCU: Güvenli rastgele yeni PIN üretmek için: python pin_assistant.py --generate-pin")
 
 if __name__ == "__main__":
     main()

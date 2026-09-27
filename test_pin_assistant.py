@@ -1,5 +1,5 @@
 import unittest
-from pin_assistant import validate_pin, get_provider_info, PROVIDERS
+from pin_assistant import validate_pin, get_provider_info, generate_secure_pin, PROVIDERS
 
 class TestPinAssistant(unittest.TestCase):
     def test_validate_pin_valid(self):
@@ -37,10 +37,20 @@ class TestPinAssistant(unittest.TestCase):
         self.assertFalse(res2["valid"])
         self.assertIn("azalan", res2["reason"])
 
+    def test_generate_secure_pin(self):
+        for _ in range(5):
+            pin = generate_secure_pin(6)
+            self.assertEqual(len(pin), 6)
+            self.assertTrue(validate_pin(pin)["valid"])
+
     def test_get_provider_info(self):
         kamu = get_provider_info("kamusm")
         self.assertIsNotNone(kamu)
         self.assertIn("Kamu SM", kamu["name"])
+
+        edm = get_provider_info("edmbilisim")
+        self.assertIsNotNone(edm)
+        self.assertIn("EDM", edm["name"])
 
         invalid = get_provider_info("nonexistent")
         self.assertIsNone(invalid)
