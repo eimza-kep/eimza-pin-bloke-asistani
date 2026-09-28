@@ -3,7 +3,7 @@
 [![Python CI](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions/workflows/ci.yml/badge.svg)](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com)
-[![Blog](https://img.shields.io/badge/Rehber-E--%C4%B0mza%20Rehberi-22c55e.svg)](https://eimza-rehberi.pages.dev/)
+[![Blog](https://img.shields.io/badge/Rehber-E--%C4%B0mza%20Rehberi-22c55e.svg)](https://eimzabilgi.site/)
 
 E-İmza ve Mali Mühür PIN kodunu 3 kez yanlış girerek bloke edenler için; yetkili sertifika sağlayıcılarından (TÜBİTAK Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM Bilişim, Turkcell Mobil İmza) **PUK kodu temin adımlarını gösteren**, yeni PIN güvenlik kurallarını denetleyen ve rastgele güvenli PIN üreten açık kaynaklı yardımcı araç.
 
@@ -53,9 +53,9 @@ Bu araç [eimza-kep](https://github.com/eimza-kep) organizasyonunun açık kayna
 ---
 
 ## 📚 İlgili Teknik Rehberler
-* 📄 [E-İmza PIN Kodu Bloke Oldu Ne Yapmalıyım? PUK ile Kilit Çözme](https://eimza-rehberi.pages.dev/yazilar/eimza-pin-bloke-puk-kodu-sifirlama.html)
-* 📄 [Mali Mühür Bloke Olduğunda PUK Kodu ile Kilit Nasıl Açılır?](https://mali-muhur-merkezi.pages.dev/yazilar/mali-muhur-pin-bloke-puk-kodu-cozum.html)
-* 📄 [AKİS Akıllı Kart İzleme Aracında PIN Kilidi Açma Adımları](https://eimza-rehberi.pages.dev/yazilar/akis-kart-izleme-araci-kullanim-rehberi.html)
+* 📄 [E-İmza PIN Kodu Bloke Oldu Ne Yapmalıyım? PUK ile Kilit Çözme](https://eimzabilgi.site/yazilar/eimza-pin-bloke-puk-kodu-sifirlama.html)
+* 📄 [Mali Mühür Bloke Olduğunda PUK Kodu ile Kilit Nasıl Açılır?](https://malimuhur.site/yazilar/mali-muhur-pin-bloke-puk-kodu-cozum.html)
+* 📄 [AKİS Akıllı Kart İzleme Aracında PIN Kilidi Açma Adımları](https://eimzabilgi.site/yazilar/akis-kart-izleme-araci-kullanim-rehberi.html)
 
 ---
 

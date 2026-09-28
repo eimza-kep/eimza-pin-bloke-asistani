@@ -7,7 +7,7 @@ Türkiye'deki tüm yetkili ESHS ve GSM operatörlerinin (Kamu SM, TÜRKTRUST,
 E-Güven, E-Tuğra, EDM, Turkcell, Vodafone, TT) PUK temin adımlarını, güvenli
 PIN kurallarını ve kriptografik rastgele yeni PIN üretimini sağlar.
 
-Yazar: E-İmza & Dijital Dönüşüm Portalı (https://eimza-rehberi.pages.dev/)
+Yazar: E-İmza & Dijital Dönüşüm Portalı (https://eimzabilgi.site/)
 Lisans: MIT
 """
 
