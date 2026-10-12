@@ -54,11 +54,29 @@ PROVIDERS = {
         "portal_url": "https://portal.edmbilisim.com.tr/",
         "puk_guide": "1. EDM Müşteri Portalı'na giriş yapın.\n2. E-İmza İşlemleri sekmesinden PUK Kodu Al düğmesine basın.\n3. USB Token yönetim panelinde PUK girerek yeni PIN belirleyin."
     },
+    "eimzatr": {
+        "name": "E-İmzaTR",
+        "description": "Nitelikli elektronik sertifika ve USB token çözümleri",
+        "portal_url": "https://www.e-imzatr.com.tr/",
+        "puk_guide": "1. E-İmzaTR Müşteri Portalı'na kimlik bilgilerinizle giriş yapın.\n2. Sertifika Yönetimi > PUK Kodu Öğrenme adımlarını izleyin.\n3. AKİS yönetim aracında PUK girerek yeni PIN belirleyin."
+    },
     "turkcell": {
         "name": "Turkcell Mobil İmza",
         "description": "SIM kart tabanlı mobil elektronik imza",
         "portal_url": "https://www.turkcell.com.tr/",
         "puk_guide": "1. 3 kez yanlış girilen Mobil İmza şifresi bloke olur.\n2. Turkcell Müşteri Hizmetleri (532) veya Turkcell Mağazaları üzerinden kimlik doğrulamasıyla yeni şifre oluşturulmalıdır."
+    },
+    "vodafone": {
+        "name": "Vodafone Mobil İmza",
+        "description": "Vodafone SIM kart tabanlı mobil elektronik imza servisi",
+        "portal_url": "https://www.vodafone.com.tr/",
+        "puk_guide": "1. Bloke olan mobil imzanız için 542 Müşteri Hizmetleri aranmalıdır.\n2. Güvenlik teyidinin ardından mobil imza şifre sıfırlama talebi oluşturulur."
+    },
+    "turktelekom": {
+        "name": "Türk Telekom Mobil İmza",
+        "description": "Türk Telekom SIM kart tabanlı mobil imza servisi",
+        "portal_url": "https://www.turktelekom.com.tr/",
+        "puk_guide": "1. 3 hatalı şifre denemesi sonrası mobil imza bloke olur.\n2. 444 1 444 Müşteri Hizmetleri veya Türk Telekom Ofislerinden şifre yenileme yapılır."
     }
 }
 
