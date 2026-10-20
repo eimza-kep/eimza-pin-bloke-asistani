@@ -125,6 +125,40 @@ def generate_secure_pin(length=6) -> str:
         if validate_pin(candidate)["valid"]:
             return candidate
 
+def generate_puk_unblock_apdu(card_type: str, puk_code: str, new_pin: str) -> dict:
+    """
+    AKİS (TÜBİTAK) ve CardOS (Siemens/Atos) akıllı kartları için
+    ISO 7816-4 RESET RETRY COUNTER (0x2C) APDU komut dizisi üretir.
+    """
+    card_type_norm = card_type.lower().strip()
+    puk_clean = puk_code.strip()
+    new_pin_clean = new_pin.strip()
+
+    val_pin = validate_pin(new_pin_clean)
+    if not val_pin["valid"]:
+        raise ValueError(f"Geçersiz yeni PIN: {val_pin['reason']}")
+
+    puk_padded = puk_clean.ljust(8, "F")[:8]
+    new_pin_padded = new_pin_clean.ljust(8, "F")[:8]
+
+    puk_hex = " ".join(f"{ord(c):02X}" if c != "F" else "FF" for c in puk_padded)
+    pin_hex = " ".join(f"{ord(c):02X}" if c != "F" else "FF" for c in new_pin_padded)
+
+    if "cardos" in card_type_norm:
+        apdu = f"00 2C 00 01 10 {puk_hex} {pin_hex}"
+        explanation = "CardOS ISO 7816-4 RESET RETRY COUNTER (Unblock & Set PIN)"
+    else:
+        apdu = f"00 2C 02 81 10 {puk_hex} {pin_hex}"
+        explanation = "TÜBİTAK AKİS / PKCS#15 Standard Reset Retry Counter APDU"
+
+    return {
+        "card_type": card_type,
+        "apdu_hex": apdu,
+        "explanation": explanation,
+        "expected_response": "90 00 (SW1/SW2 Başarılı)",
+        "terminal_command": f"echo \"{apdu.replace(' ', '')}\" | opensc-tool -s"
+    }
+
 def get_provider_info(provider_key: str):
     return PROVIDERS.get(provider_key.lower().strip())
 
@@ -134,9 +168,34 @@ def main():
     parser.add_argument("--provider", choices=list(PROVIDERS.keys()) + ["all"], default="all", help="E-imza sağlayıcısı")
     parser.add_argument("--validate-pin", help="Yeni belirlenecek PIN kodunun güvenliğini test et")
     parser.add_argument("--generate-pin", action="store_true", help="Güvenli, kurallara uygun rastgele 6 haneli yeni PIN üretir")
+    parser.add_argument("--generate-apdu", action="store_true", help="AKİS / CardOS kartlar için PUK ile PIN sıfırlama APDU komut dizisi üretir")
+    parser.add_argument("--card-type", choices=["akis", "cardos"], default="akis", help="Akıllı kart donanım tipi (akis veya cardos)")
+    parser.add_argument("--puk", help="Sıfırlama için girilecek PUK kodu")
+    parser.add_argument("--new-pin", help="Yeni belirlenecek 6 haneli PIN")
     parser.add_argument("--json", action="store_true", help="JSON çıktısı ver")
 
     args = parser.parse_args()
+
+    if args.generate_apdu:
+        puk = args.puk or "12345678"
+        new_pin = args.new_pin or "482915"
+        try:
+            res_apdu = generate_puk_unblock_apdu(args.card_type, puk, new_pin)
+            if args.json:
+                print(json.dumps(res_apdu, indent=2, ensure_ascii=False))
+            else:
+                print("=" * 65)
+                print(f"APDU PUK BLOKE ÇÖZME KOMUT DİZİSİ ({res_apdu['card_type'].upper()})")
+                print("=" * 65)
+                print(f"Komut Hex         : {res_apdu['apdu_hex']}")
+                print(f"Açıklama          : {res_apdu['explanation']}")
+                print(f"Beklenen Yanıt    : {res_apdu['expected_response']}")
+                print(f"Terminal Çalıştırma: {res_apdu['terminal_command']}")
+                print("=" * 65)
+        except Exception as e:
+            print(f"[!] HATA: {e}", file=sys.stderr)
+            sys.exit(1)
+        return
 
     if args.generate_pin:
         pin = generate_secure_pin(6)

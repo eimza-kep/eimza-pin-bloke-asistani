@@ -1,20 +1,21 @@
-# E-İmza & Mali Mühür PIN Bloke Asistanı 🔓🔏
+# E-İmza PIN Bloke Kaldırma ve PUK Asistanı 🔓🔑
 
 [![Python CI](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions/workflows/ci.yml/badge.svg)](https://github.com/eimza-kep/eimza-pin-bloke-asistani/actions)
 [![Lisans: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-blue.svg)](https://github.com)
 [![Blog](https://img.shields.io/badge/Rehber-E--%C4%B0mza%20Rehberi-22c55e.svg)](https://eimzabilgi.site/)
 
-E-İmza ve Mali Mühür PIN kodunu 3 kez yanlış girerek bloke edenler için; yetkili sertifika sağlayıcılarından (TÜBİTAK Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM Bilişim, Turkcell Mobil İmza) **PUK kodu temin adımlarını gösteren**, yeni PIN güvenlik kurallarını denetleyen ve rastgele güvenli PIN üreten açık kaynaklı yardımcı araç.
+Türkiye'deki yetkili Elektronik Sertifika Hizmet Sağlayıcıları (Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM Bilişim, E-İmzaTR) ve GSM operatörlerinin (Turkcell, Vodafone, Türk Telekom Mobil İmza) e-imza USB token PIN bloke kaldırma adımlarını, PUK sorgulama portallarını ve APDU komut dizilerini sunan açık kaynaklı asistan.
 
 ---
 
 ## ✨ Öne Çıkan Özellikler
 
-* 🏢 **Tüm Sağlayıcılar:** Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM Bilişim ve Mobil İmza kılavuzları.
+* 🏢 **Tam ESHS ve GSM Kapsamı:** Kamu SM, TÜRKTRUST, E-Güven, E-Tuğra, EDM, E-İmzaTR ve Mobil İmza servisleri.
+* ⚡ **AKİS & CardOS APDU Üreteci:** ISO 7816-4 RESET RETRY COUNTER (`0x2C`) komut dizisi ile terminalden doğrudan PUK açma.
 * 🛡️ **Güvenli PIN Doğrulama:** Ardışık (123456), tekrarlayan (111111) ve zayıf PIN'leri engelleyen denetim motoru.
 * 🎲 **Kriptografik PIN Üretici:** `--generate-pin` ile kurallara tam uyumlu rastgele 6 haneli yeni PIN üretimi.
-* 🖥️ **PowerShell ve Bash Entegrasyonu:** Windows ve Linux terminal desteği.
+* 🖥️ **PowerShell ve Bash Entegrasyonu:** Windows, Linux ve macOS terminal desteği.
 
 ---
 
@@ -29,12 +30,21 @@ python pin_assistant.py
 python pin_assistant.py --provider kamusm
 ```
 
-### 2. Yeni Belirlenecek PIN'i Doğrulama
+### 2. AKİS & CardOS İçin APDU PUK Sıfırlama Komutu Üretme
+```bash
+# AKİS akıllı kartlar için APDU komutu
+python pin_assistant.py --generate-apdu --card-type akis --puk 12345678 --new-pin 482915
+
+# Siemens/Atos CardOS kartlar için APDU komutu
+python pin_assistant.py --generate-apdu --card-type cardos --puk 12345678 --new-pin 482915
+```
+
+### 3. Yeni Belirlenecek PIN'i Doğrulama
 ```bash
 python pin_assistant.py --validate-pin 482915
 ```
 
-### 3. Otomatik Güvenli PIN Üretme
+### 4. Otomatik Güvenli PIN Üretme
 ```bash
 python pin_assistant.py --generate-pin
 ```
@@ -58,7 +68,3 @@ Bu araç [eimza-kep](https://github.com/eimza-kep) organizasyonunun açık kayna
 * 📄 [AKİS Akıllı Kart İzleme Aracında PIN Kilidi Açma Adımları](https://eimzabilgi.site/yazilar/akis-kart-izleme-araci-kullanim-rehberi.html)
 
 ---
-
-## ⚖️ Lisans
-
-Bu proje [MIT Lisansı](LICENSE) ile lisanslanmıştır.

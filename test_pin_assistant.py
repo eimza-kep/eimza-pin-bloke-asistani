@@ -1,5 +1,11 @@
 import unittest
-from pin_assistant import validate_pin, get_provider_info, generate_secure_pin, PROVIDERS
+from pin_assistant import (
+    validate_pin,
+    get_provider_info,
+    generate_secure_pin,
+    generate_puk_unblock_apdu,
+    PROVIDERS
+)
 
 class TestPinAssistant(unittest.TestCase):
     def test_validate_pin_valid(self):
@@ -54,6 +60,24 @@ class TestPinAssistant(unittest.TestCase):
 
         invalid = get_provider_info("nonexistent")
         self.assertIsNone(invalid)
+
+    def test_generate_puk_unblock_apdu(self):
+        # Test AKIS APDU
+        res_akis = generate_puk_unblock_apdu("akis", "12345678", "482915")
+        self.assertEqual(res_akis["card_type"], "akis")
+        self.assertTrue(res_akis["apdu_hex"].startswith("00 2C 02 81 10"))
+        self.assertIn("AKİS", res_akis["explanation"])
+        self.assertIn("90 00", res_akis["expected_response"])
+
+        # Test CardOS APDU
+        res_cardos = generate_puk_unblock_apdu("cardos", "87654321", "593812")
+        self.assertEqual(res_cardos["card_type"], "cardos")
+        self.assertTrue(res_cardos["apdu_hex"].startswith("00 2C 00 01 10"))
+        self.assertIn("CardOS", res_cardos["explanation"])
+
+        # Test invalid PIN in APDU
+        with self.assertRaises(ValueError):
+            generate_puk_unblock_apdu("akis", "12345678", "123456")
 
 if __name__ == "__main__":
     unittest.main()
