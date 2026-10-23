@@ -1,9 +1,11 @@
 import unittest
 from pin_assistant import (
     validate_pin,
+    validate_puk,
     get_provider_info,
     generate_secure_pin,
     generate_puk_unblock_apdu,
+    generate_html_guide,
     PROVIDERS
 )
 
@@ -43,6 +45,30 @@ class TestPinAssistant(unittest.TestCase):
         self.assertFalse(res2["valid"])
         self.assertIn("azalan", res2["reason"])
 
+    def test_validate_puk_valid(self):
+        res = validate_puk("12345678")
+        self.assertTrue(res["valid"])
+
+        res_alpha = validate_puk("A1B2C3D4")
+        self.assertTrue(res_alpha["valid"])
+
+    def test_validate_puk_invalid_length(self):
+        res_short = validate_puk("12345")
+        self.assertFalse(res_short["valid"])
+        self.assertIn("8 karakter", res_short["reason"])
+
+        res_long = validate_puk("123456789")
+        self.assertFalse(res_long["valid"])
+
+    def test_validate_puk_invalid_chars(self):
+        res_chars = validate_puk("1234-567")
+        self.assertFalse(res_chars["valid"])
+        self.assertIn("harf ve rakam", res_chars["reason"])
+
+    def test_validate_puk_all_same(self):
+        res_same = validate_puk("00000000")
+        self.assertFalse(res_same["valid"])
+
     def test_generate_secure_pin(self):
         for _ in range(5):
             pin = generate_secure_pin(6)
@@ -78,6 +104,17 @@ class TestPinAssistant(unittest.TestCase):
         # Test invalid PIN in APDU
         with self.assertRaises(ValueError):
             generate_puk_unblock_apdu("akis", "12345678", "123456")
+
+        # Test invalid PUK in APDU
+        with self.assertRaises(ValueError):
+            generate_puk_unblock_apdu("akis", "123", "482915")
+
+    def test_generate_html_guide(self):
+        html = generate_html_guide()
+        self.assertIn("<!DOCTYPE html>", html)
+        self.assertIn("TÜBİTAK Kamu SM", html)
+        self.assertIn("TÜRKTRUST", html)
+        self.assertIn("v1.3", html)
 
 if __name__ == "__main__":
     unittest.main()
